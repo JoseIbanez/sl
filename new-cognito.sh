@@ -1,7 +1,13 @@
+#!/bin/bash
+set -e
 
-export COGNITO_USERPOOL="Feedback4"
+
+export COGNITO_USERPOOL="Feedback"
 export WEB_APPLICATION="WebApp"
+export POOL_DOMAIN=`echo $BUCKETNAME | tr '[:upper:]' '[:lower:]'`
 
+
+# Create cognito user pool
 aws cognito-idp create-user-pool \
     --username-attributes "email" \
     --schema \
@@ -10,6 +16,7 @@ aws cognito-idp create-user-pool \
     --pool-name $COGNITO_USERPOOL > out/cognito.json
 
 export USERPOOL_ID=`cat out/cognito.json | jq -r .UserPool.Id`
+
 
 # Add web application
 aws cognito-idp create-user-pool-client \
@@ -24,11 +31,12 @@ aws cognito-idp create-user-pool-client \
     --allowed-o-auth-scopes "email" "openid" \
     --callback-urls https://boliche.ovh \
     --logout-urls https://boliche.ovh \
-    > out/user_pool_client.json
+    > out/cognito_client.json
 
-# Configure web domain
-export POOL_DOMAIN=`echo $WEB_APPLICATION | tr '[:upper:]' '[:lower:]'`
+
+# Configure domain
 aws cognito-idp create-user-pool-domain \
     --user-pool-id $USERPOOL_ID \
-    --domain "$POOL_DOMAIN-sl-001"
+    --domain $POOL_DOMAIN \
+    > out/cognito_domain.json
     

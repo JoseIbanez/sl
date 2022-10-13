@@ -1,7 +1,7 @@
 #!/bin/bash
 
 aws dynamodb create-table \
-    --table-name Feedback \
+    --table-name $DYNAMODB_TABLE \
     --attribute-definitions \
         AttributeName=Id,AttributeType=S \
         AttributeName=Email,AttributeType=S \
@@ -10,5 +10,5 @@ aws dynamodb create-table \
         AttributeName=Id,KeyType=RANGE \
     --provisioned-throughput \
         ReadCapacityUnits=5,WriteCapacityUnits=5 \
-    --table-class STANDARD
-
+    --table-class STANDARD \
+    > out/dynamodb_table.json

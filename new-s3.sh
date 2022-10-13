@@ -1,6 +1,6 @@
 #!/bin/bash
+set -e
 
-BUCKETNAME="slb5-ibanez-001"
 
 
 aws s3api create-bucket \

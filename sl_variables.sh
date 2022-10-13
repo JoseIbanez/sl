@@ -1,4 +1,4 @@
 export AWS_PROFILE=sl
 
-export BUCKETNAME="slb5-ibanez-001"
+export BUCKETNAME="sl-ibanez-s3p2"
 export DYNAMODB_TABLE="Feedback"

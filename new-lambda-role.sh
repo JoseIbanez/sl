@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 export LAMBDA_ROLE="FeedbackLambda"
 export DYNAMODBWRITE_POLICY="DynamoDBWriteAccess"

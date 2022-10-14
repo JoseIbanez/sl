@@ -21,4 +21,5 @@ aws s3 sync $HOME/Projects/sl/csb-i36iel/ s3://$BUCKETNAME/csb-i36iel/ \
 aws s3 cp $HOME/Projects/sl/csb-i36iel/index.html s3://$BUCKETNAME/
 
 
-open -a "Google Chrome"  http://$BUCKETNAME.s3-website-us-east-1.amazonaws.com/ 
+# Open web page
+open -a "Google Chrome" "http://$BUCKETNAME.s3-website-us-east-1.amazonaws.com/"

@@ -5,13 +5,17 @@ set -e
 export COGNITO_USERPOOL="Feedback"
 export WEB_APPLICATION="WebApp"
 export POOL_DOMAIN=`echo $BUCKETNAME | tr '[:upper:]' '[:lower:]'`
-
+export REDIRECT_URL=https://boliche.ovh
+export LOGOUT_URL=https://boliche.ovh
 
 # Create cognito user pool
 aws cognito-idp create-user-pool \
+    --auto-verified-attributes "email" \
     --username-attributes "email" \
+    --username-configuration "CaseSensitive=false" \
     --schema \
     Name=name,Mutable=true,Required=true \
+    Name=email,Mutable=true,Required=true \
     Name=phone_number,Mutable=true,Required=true \
     --pool-name $COGNITO_USERPOOL > out/cognito.json
 
@@ -28,9 +32,9 @@ aws cognito-idp create-user-pool-client \
     --supported-identity-providers "COGNITO" \
     --allowed-o-auth-flows-user-pool-client \
     --allowed-o-auth-flows "implicit" \
-    --allowed-o-auth-scopes "email" "openid" \
-    --callback-urls https://boliche.ovh \
-    --logout-urls https://boliche.ovh \
+    --allowed-o-auth-scopes "email" "openid" "profile" \
+    --callback-urls $REDIRECT_URL \
+    --logout-urls $LOGOUT_URL \
     > out/cognito_client.json
 
 
@@ -39,4 +43,11 @@ aws cognito-idp create-user-pool-domain \
     --user-pool-id $USERPOOL_ID \
     --domain $POOL_DOMAIN \
     > out/cognito_domain.json
-    
+
+
+# Open web page
+export CLIENT_ID=`cat out/cognito_client.json | jq -r .UserPoolClient.ClientId`
+
+sleep 5
+open -a "Google Chrome" "https://$POOL_DOMAIN.auth.us-east-1.amazoncognito.com/login?client_id=$CLIENT_ID&response_type=token&scope=email+openid&redirect_uri=$REDIRECT_URL"
+

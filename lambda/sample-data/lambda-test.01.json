@@ -1,0 +1,13 @@
+{
+    "Records": [
+      {
+        "EventSource": "aws:sns",
+        "EventVersion": "1.0",
+        "EventSubscriptionArn": "arn:aws:sns:us-east-1:{{{accountId}}}:ExampleTopic",
+        "Sns": {
+            "Message": "{\"AlarmName\": \"vgsl-sdwan-jms-dev-preprod-netconf-engine-collected-commands\", \"AlarmDescription\": \"Demo Engine, Test Alarm\", \"AWSAccountId\": \"010657612649\", \"AlarmConfigurationUpdatedTimestamp\": \"2022-07-15T07:25:57.780+0000\", \"NewStateValue\": \"ALARM\", \"NewStateReason\": \"Threshold Crossed: 3 out of the last 3 datapoints [253.0 (20/07/22 07:29:00), 208.0 (20/07/22 07:24:00), 219.0 (20/07/22 07:09:00)] were less than or equal to the threshold (300.0) (minimum 3 datapoints for OK -> ALARM transition).\", \"StateChangeTime\": \"2022-07-20T07:34:54.790+0000\", \"Region\": \"EU (Ireland)\", \"AlarmArn\": \"arn:aws:cloudwatch:eu-west-1:010657612649:alarm:vgsl-sdwan-jms-dev-preprod-netconf-engine-collected-commands\", \"OldStateValue\": \"OK\", \"OKActions\": [], \"AlarmActions\": [\"arn:aws:sns:eu-west-1:010657612649:vgsl-sdwan-jms-dev-preprod-sns-slack-alarms\"], \"InsufficientDataActions\": [], \"Trigger\": {\"MetricName\": \"command_collected\", \"Namespace\": \"netconf-engine\", \"StatisticType\": \"Statistic\", \"Statistic\": \"SUM\", \"Unit\": null, \"Dimensions\": [], \"Period\": 300, \"EvaluationPeriods\": 3, \"DatapointsToAlarm\": 3, \"ComparisonOperator\": \"LessThanOrEqualToThreshold\", \"Threshold\": 300, \"TreatMissingData\": \"breaching\", \"EvaluateLowSampleCountPercentile\": \"\"}}" 
+        }        
+       
+      }
+    ]
+  }

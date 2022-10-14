@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 aws dynamodb create-table \
     --table-name $DYNAMODB_TABLE \

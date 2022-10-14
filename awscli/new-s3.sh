@@ -23,3 +23,13 @@ aws s3 cp $HOME/Projects/sl/csb-i36iel/index.html s3://$BUCKETNAME/
 
 # Open web page
 open -a "Google Chrome" "http://$BUCKETNAME.s3-website-us-east-1.amazonaws.com/"
+
+
+# Create cloudfront distribution 
+
+aws cloudfront create-distribution \
+    --origin-domain-name "$BUCKETNAME.s3-website-us-east-1.amazonaws.com" \
+    --default-root-object index.html \
+    > out/cloudfront.json    
+
+    

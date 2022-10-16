@@ -25,7 +25,15 @@ Resources:
       ParentId: !GetAtt apiGateway.RootResourceId
       PathPart: api
     DependsOn: apiGateway
-    
+
+  feedbackResource: 
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref apiGateway
+      ParentId: !Ref apiResource
+      PathPart: feedback
+    DependsOn: apiGateway
+
 
   feedbackPostMethod:
     Type: AWS::ApiGateway::Method
@@ -38,7 +46,7 @@ Resources:
         Uri: !Sub
           - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
           - lambdaArn: !Ref lambdaFunction
-      ResourceId: !Ref apiResource
+      ResourceId: !Ref feedbackResource
       RestApiId: !Ref apiGateway
 
 
@@ -57,7 +65,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref lambdaFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/*/POST/feedback
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/*/POST/api/feedback
 
 
 Outputs:

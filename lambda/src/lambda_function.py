@@ -1,56 +1,41 @@
-#!/usr/bin/python3.8
-import urllib3 
 import json
-import os
-from jinja2 import Template
+import boto3
 
-http = urllib3.PoolManager() 
-
-def lambda_handler(event, context): 
+def lambda_handler(event, context):
+    # TODO implement
+    print(event)
     
-    to_slack(event, context)
-    to_teams(event, context)
+    if not 'body' in event:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'Error':'Input body not defined'})
+        }
 
-    
-def to_slack(event, context):
-    url = os.environ.get("SLACK_WEBHOOK")
-    msg = {
-        "text": event['Records'][0]['Sns']['Message']
+    input = json.loads(event['body'])
+        
+    if not ('Email' in input or 'Comment' in input or 'Id' in input):
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'Error':'Missing parameters'})
+        }
+
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('Feedback')
+    try:
+        response = table.put_item(
+            Item={
+                'Id': input['Id'],
+                'Email': input['Email'],
+                'Comment': input['Comment']
+            })
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'Error': str(e)})
+        }
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Record has been successfully inserted')
     }
-    encoded_msg = json.dumps(msg,indent=4).encode('utf-8')
-    headers = {'content-type': 'application/json'}
-    resp = http.request('POST',url, body=encoded_msg, headers=headers)
-    print({
-        "request_body": encoded_msg, 
-        "status_code": resp.status, 
-        "response": resp.data
-    })
-    
-def to_teams(event, context):
-
-    with open('teams_template.json', 'r') as file:
-        template = file.read()
-
-    try:
-        alarm = json.loads(event['Records'][0]['Sns']['Message'])
-    except:
-        alarm = {}
-    
-    try:
-        alarm['AWSRegionId'] = alarm.get('AlarmArn').split(':')[3]
-    except:
-        alarm['AWSRegionId'] = "eu-west-1"
-    
-    t = Template(template)
-    encoded_msg = t.render(alarm)
-    
-
-    headers = {'content-type': 'application/json'}
-    url = os.environ.get("TEAMS_WEBHOOK")
-    resp = http.request('POST',url, body=encoded_msg, headers=headers)
-    print({
-        "request_body": encoded_msg, 
-        "status_code": resp.status, 
-        "response": resp.data
-    })
-    

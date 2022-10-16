@@ -19,14 +19,15 @@ Resources:
       Name: feedback-api
 
   apiResource: 
-    Type": "AWS::ApiGateway::Resource"
+    Type: "AWS::ApiGateway::Resource"
     Properties:
       RestApiId: !Ref apiGateway
       ParentId: !GetAtt apiGateway.RootResourceId
       PathPart: api
-      
+    DependsOn: apiGateway
+    
 
-  apiGatewayRootMethod:
+  feedbackPostMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -37,14 +38,14 @@ Resources:
         Uri: !Sub
           - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations
           - lambdaArn: !Ref lambdaFunction
-      ResourceId: !GetAtt apiGateway.apiResource
+      ResourceId: !Ref apiResource
       RestApiId: !Ref apiGateway
 
 
   apiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
-      - apiGatewayRootMethod
+      - feedbackPostMethod
     Properties:
       RestApiId: !Ref apiGateway
       StageName: prod

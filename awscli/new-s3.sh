@@ -32,4 +32,5 @@ aws cloudfront create-distribution \
     --default-root-object index.html \
     > out/cloudfront.json    
 
-    
+export CF_URL=`cat out/cloudfront.json | jq -r .Distribution.DomainName`
+#open -a "Google Chrome" "https://$CF_URL"

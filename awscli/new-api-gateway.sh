@@ -1,14 +1,15 @@
 #!/bin/bash
 
+
+export LAMBDA_ARN=`cat out/lambda_function.json | jq -r .FunctionArn`
+
 aws cloudformation deploy \
-    --template-file /path_to_template/template.json \
-    --stack-name my-new-stack \
+    --template-file ../cloudFormation/apiGateway.yaml \
+    --stack-name my-api \
     --parameter-overrides \
-        Key1=Value1 \
+        lambdaFunction=$LAMBDA_ARN \
         Key2=Value2 \
     --tags \
         Key1=Value1 \
         Key2=Value2
-        
-
 

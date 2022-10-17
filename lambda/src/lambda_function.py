@@ -1,6 +1,12 @@
 import json
 import boto3
 
+COMMON_HEADER = {
+    "Access-Control-Allow-Origin" : "*",
+    "Access-Control-Allow-Credentials" : True 
+}
+
+
 def lambda_handler(event, context):
     # TODO implement
     print(event)
@@ -8,6 +14,7 @@ def lambda_handler(event, context):
     if not 'body' in event:
         return {
             'statusCode': 500,
+            'headers': COMMON_HEADER,
             'body': json.dumps({'Error':'Input body not defined'})
         }
 
@@ -16,6 +23,7 @@ def lambda_handler(event, context):
     if not ('Email' in input or 'Comment' in input or 'Id' in input):
         return {
             'statusCode': 500,
+            'headers': COMMON_HEADER,
             'body': json.dumps({'Error':'Missing parameters'})
         }
 
@@ -32,10 +40,12 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 500,
+            'headers': COMMON_HEADER,
             'body': json.dumps({'Error': str(e)})
         }
 
     return {
         'statusCode': 200,
+        'headers': COMMON_HEADER,
         'body': json.dumps('Record has been successfully inserted')
     }

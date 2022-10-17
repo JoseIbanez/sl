@@ -50,16 +50,19 @@ export default {
       }
 
       const newInformation = {
-        id: Math.floor(Math.random() * 10000000),
-        email: this.email,
-        comment: this.comment,
+        Id: Math.floor(Math.random() * 10000000).toString(),
+        Email: this.email,
+        Comment: this.comment,
       };
 
       this.$emit("add-information", newInformation);
       console.log("sending ... ", newInformation);
 
       axios
-        .post("./api/posts", newInformation)
+        .post(process.env.VUE_APP_API_URL+"/api/feedback", newInformation, {
+        headers: { 
+          'Access-Control-Allow-Origin' : '*'
+        }})
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
 

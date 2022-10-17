@@ -4,7 +4,7 @@
         {
             "Effect": "Allow",
             "Action": "dynamodb:PutItem",
-            "Resource": "arn:aws:dynamodb::${AWS_ACCOUNT}:table/${DYNAMODB_TABLE}"
+            "Resource": "arn:aws:dynamodb:us-east-1:${AWS_ACCOUNT}:table/${DYNAMODB_TABLE}"
         }
     ]
 }

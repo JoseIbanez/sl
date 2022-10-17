@@ -11,3 +11,4 @@ yarn build
 cd ../awscli
 aws s3 sync ../feedback-form/dist s3://$BUCKETNAME/csb-i36iel/ \
     --exclude '.git/*' 
+aws s3 cp ../feedback-form/dist/index.html s3://$BUCKETNAME/

@@ -5,8 +5,11 @@ set -e
 export COGNITO_USERPOOL="Feedback"
 export WEB_APPLICATION="WebApp"
 export POOL_DOMAIN=`echo $BUCKETNAME | tr '[:upper:]' '[:lower:]'`
-export REDIRECT_URL=https://boliche.ovh
-export LOGOUT_URL=https://boliche.ovh
+
+# Redirect URL
+export CF_URL=`cat out/cloudfront.json | jq -r .Distribution.DomainName`
+export REDIRECT_URL="https://$CF_URL"
+export LOGOUT_URL="https://$CF_URL"
 
 # Create cognito user pool
 aws cognito-idp create-user-pool \
